@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lets_net_work/event_map.dart';
 import 'package:lets_net_work/model/event_data.dart';
 
 class DiscoverPage extends StatelessWidget {
@@ -102,18 +103,12 @@ class DiscoverPage extends StatelessWidget {
           queryShot.docs.map((doc) => EventData.fromJson(doc.data())).toList();
 
       List<Widget> tiles = [];
-      tiles.add(const Text(
-        "UPCOMING EVENTS",
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-      ));
       tiles.add(SizedBox(height: 16));
 
       tiles = tiles + eventsToTiles(events);
-      return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: tiles,
-        ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: tiles,
       );
     }
 
@@ -134,7 +129,18 @@ class DiscoverPage extends StatelessWidget {
           if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           } else {
-            return snapshot.data!;
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("UPCOMING EVENTS", style:TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                  snapshot.data!,
+                  SizedBox(height: 20),
+                  const Text("EVENTS MAP", style:TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                  EventMap(),
+                ],
+              ),
+            );
           }
         },
       ),
